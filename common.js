@@ -24,8 +24,83 @@
         var system = {
             win: false,
             mac: false,
-            x11: false
+            x11: false,
+            //移动设备
+            iphone: false,
+            ipod: false,
+            ipad: false,
+            ios: false,
+            android: false,
+            nokiaN: false,
+            winMobile: false,
+            //游戏系统
+            wii: false,
+            ps: false
         };
+        //检测呈现引擎和浏览器
+        var ua = navigator.userAgent;
+        if(window.opera){
+            engine.ver = browser.ver = window.opera.version();
+            engine.opera = browser.opera = parseFloat(engine.ver);
+        }else if(/AppleWebKit\/(\s+)/.test(ua)){
+            engine.ver = RegExp["$1"];
+            engine.webkit = parseFloat(engine.ver);
+            //确定是chrome还是safari
+            if(/Chrome\/(\s+)/.test(ua)){
+                browser.ver = RegExp["$1"];
+                browser.chrome = parseFloat(engine.ver);
+            }else if(/Version\/(\s+)/.test(ua)){
+                browser.ver = RegExp["$1"];
+                browser.safari = parseFloat(engine.ver);
+            }else{
+                //近似的确定版本号
+                var safariVersion = 1;
+                if(engine.webkit<100){
+                    safariVersion = 1;
+                }else if(engine.webkit<312){
+                    safariVersion = 1.2;
+                }else if(engine.webkit<412){
+                    safariVersion = 1.3;
+                }else{
+                    safariVersion = 2;
+                }
+                browser.safari = browser.ver = safariVersion;
+            }
+        }else if(/KHTML\/(\s+)/.test(ua)||/Konqueror\/([^;]+)/.test(ua)){
+            engine.ver = browser.ver = RegExp(["$1"]);
+            engine.khtml = browser.konq = parseFloat(engin.ver);
+        }else if(/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){
+            engine.ver = RegExp(["$1"]);
+            engine.khtml = parseFloat(engin.ver);
+            //确定是不是火狐
+            if(/Firefox\/(\s+)/.test(ua)){
+                browser.ver= RegExp(["$1"]);
+                browser.firefox = parseFloat(browser.ver);
+            }
+        }else if(/MSIE ([^;]+)/.test(ua)){
+            engine.ver = browser.ver = RegExp(["$1"]);
+            engine.ie = browser.ie = parseFloat(engin.ver);
+        }
+        /*
+            使用方法
+            if(client.engine.webkit){
+                if(client.browser.chrome){
+                    //执行针对chrome的代码
+                }else if(client.browser.safari){
+                    //执行针对safari的代码
+                }
+            }else if(client.engine.gecko){
+                if(client.browser.firefox){
+                    //执行针对firefox的代码
+                }else{
+                    //执行针对其他Gecko浏览器的的代码
+                }
+            }
+        
+        */
+        //检测浏览器
+        browser.ie = engine.ie;
+        browser.opera = engine.opera;
         //在此检测呈现引擎、平台设备
         return {
             engine: engine,
