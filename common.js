@@ -1,4 +1,4 @@
-(function(window,undefine){
+;(function(window,undefine){
     var client = function(){
     	//呈现引擎
     	var engine = {
